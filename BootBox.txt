@@ -1,0 +1,77 @@
+VirtualBox에서 부트캠프 파티션 사용하기
+Mac / 2013/11/15 19:04
+수능치고 친구랑 바람의나라(..)정도 할려고 윈도우를 설치하였다.
+무료 가상머신인 VirtualBox 가 꽤나 쓸만하대서 얘로 진행.
+부트캠프는 쓸 생각이 없었어나 가상머신에선 실행이 안되는 핵쉴드 때문에
+결국 붓캠으로 재설치하였다ㅠㅠㅠㅠ
+
+패러렐즈와 달리 VirtualBox 는 부트캠프 파티션을 가져오는 기능을 기본으로 지원하지 않는다.
+하지만 검색해보면 방법은 있고, 클리앙 팁게에 용자군 님이
+[맥] 버추얼박스(Virtualbox)에서 부트캠프 파티션 쓰기(Windows7)
+
+라는 글을 써주셨다.
+
+저 글을 보고 하긴 했는데,, 2011년 글이라 그런지 저대로하면 안된다..ㅋㅋ
+언제부턴진 모르겠지만 disk0s3 은 복구파티션이 사용하기 때문..
+
+그래서 새로 정리해 봤다.
+(당연한 소리지만 $ 는 쉘 종류를 나타내는 기호로 저것까지 복&붙하면 안된다..)
+
+1. BOOTCAMP 파티션 추출
+파인더에서 우클릭 -> 추출을 선택하거나
+$ sudo umount /Volumes/BOOTCAMP/
+
+
+2. BOOTCAMP 파티션 ID 확인
+$ diskutil list
+/dev/disk0
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:      GUID_partition_scheme                        *121.3 GB   disk0
+   1:                        EFI EFI                     209.7 MB   disk0s1
+   2:                  Apple_HFS Macintosh HD            100.5 GB   disk0s2
+   3:                 Apple_Boot Recovery HD             650.0 MB   disk0s3
+   4:       Microsoft Basic Data BOOTCAMP                20.0 GB    disk0s4
+
+나의 경우 disk0s4 가 BOOTCAMP 파티션이다.
+
+3. 권한 조정
+$ sudo chmod 777 /dev/disk0s4
+
+4. vmdk 파일 생성
+vmdk 파일을 생성해야 하는데,
+난 ~/VMDisk 라는 디렉토리를 만들고 여기에 생성했다.
+$ cd ~/VMDisk
+
+명령어 젤 끝의 숫자를 자신이 확인한 BOOTCAMP 의 id 에 따라 수정해준다.
+disk0s4 라면 4번 파티션이다.
+$ sudo VBoxManage internalcommands createrawvmdk -rawdisk /dev/disk0 -filename bootcamp.vmdk -partitions 4
+
+
+5. 다시 한번 권한..
+$ sudo chown 사용자이름 bootcamp.vmdk bootcamp-pt.vmdk
+$ sudo chmod a+rw bootcamp.vmdk
+
+
+6. VirtualBox 새로만들기
+(1) 가상 하드디스크: 기존 하드디스크 사용하기 -> bootcamp.vmdk 지정
+(2) 생성된 가상머신 설정 -> 저장소 -> IDE 컨트롤러 -> 종류:ICH6
+
+7. 부팅 & VirtualBox 게스트에디션 설치
+게스트에디션은 페러렐즈 툴 같이 원활한 가상머신을 위한 프로그램으로, 부팅 상태에서 메뉴에 잘 찾아보면 있다.
+클릭하면 CD 로 마운트되고, 설치하면 된다.
+
+
+재부팅 이 후에 BOOTCAMP 파티션이 자동으로 마운트되는데,
+VirtualBox 사용전엔 꼭 언마운트 해줘야 한다.
+또한 언마운트 후에 권한 조정도 해줘야 정상적인 사용이 가능하다..
+
+즉, 재부팅할 때 마다
+$ sudo umount /Volumes/BOOTCAMP/
+$ sudo chmod 777 /dev/disk0s4
+
+를 해줘야 한다..
+
+재부팅시마다 자동으로 하는 방법이 있긴 하지만 일단 난 귀찮으니 패쓰~
+
+그리고 부트캠프 파티션을 추출해버리면 시스템 환경설정 - 시동디스크에 BOOTCAMP 가 나타나지 않는다.
+재부팅시 option 을 누르는 방식으로 진입해야 함..
