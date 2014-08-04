@@ -2,15 +2,20 @@ package ladder4;
 
 import java.io.*;
 
-/*
- * 칼럼의 개수, 바의 개수에 사용할 정수를 입력받기 위해 사용하는 클래스 
+/**
+ * @FileName: ReadStdinInt.java
+ * @Project : ladder4
+ * @Date : 2014. 7. 30.
+ * @author : markk
+ * @history :
+ * @desc :
  */
-class ReadStdinInt {
+public class ReadStdinInt {
 
 	/*
-	 * 칼럼의 개수, 바의 개수에 사용할 정수를 입력받기 위해 사용하는 메소드
+	 * get int for num of column, num of bar ( num > 0 )
 	 */
-	int getInt() {
+	static int getInt() {
 		String line = null;
 		int val = 0;
 		try {
@@ -30,7 +35,10 @@ class ReadStdinInt {
 		return val;
 	}
 
-	int getInt(int maxNum) {
+	/*
+	 * get int for current player ( num of column >= num > 0 )
+	 */
+	static int getInt(int maxNum) {
 		String line = null;
 		int val = 0;
 		try {
@@ -44,7 +52,7 @@ class ReadStdinInt {
 			}
 		} catch (NumberFormatException ex) {
 			System.err.println("0보다 크고 " + maxNum + " 이하인 정수만 입력하세요: ");
-			val = getInt();// 입력한 값이 범위를 벗어나면 다시 입력하게 함
+			val = getInt(maxNum);// 입력한 값이 범위를 벗어나면 다시 입력하게 함
 		} catch (IOException e) {
 			System.err.println("Unexpected IO ERROR: " + e);
 		}

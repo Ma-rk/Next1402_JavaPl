@@ -3,43 +3,93 @@ package ladder4;
 import java.util.ArrayList;
 import java.util.Random;
 
-/*
- * 사다리를 구성하는 변수와
- * 사다리 생성 및 출력에 필요한 메소드를 가진 클래스 
+/**
+ * @FileName: GenerateLadder.java
+ * @Project : ladder4
+ * @Date : 2014. 7. 30.
+ * @author : markk
+ * @history :
+ * @desc :
  */
 class GenerateLadder {
 	ArrayList<int[]> ladderAL;
 	int columns;
 	int columnLength;
 
-	static int BAR_DENSITY = 3;
+	static int BAR_DENSITY = 3; // the value will be applied as 1/BAR_DENSITY
 
 	GenerateLadder(int columns, int columnLength, ArrayList<int[]> ladderAL) {
 		this.columns = columns;
 		this.columnLength = columnLength;
-		this.ladderAL=ladderAL;
+		this.ladderAL = ladderAL;
 		generateLadder();
 	}
 
-	// generate columns 칼럼 생성
 	void generateLadder() {
 		for (int i = 0; i < columns; i++) {
-			//int[] asdf =new int[columnLength];
-			//ladderAL.add(asdf);
 			ladderAL.add(new int[columnLength]);
 		}
 	}
 
-	// insert bars between columns 생성된 칼럼들 사이에 바 삽입
+	// insert bars between columns
 	void insertBars() {
-		Random rd = new Random();
-		for (int x = 0; x < columns - 1; x++) {// 맨 마지막 칼럼의 직전 칼럼까지만 돈다
-			for (int y = 0; y < columnLength; y++) {
-				if (ladderAL.get(x)[y] == 0 && rd.nextInt(BAR_DENSITY) == 0) {
-					ladderAL.get(x)[y] = 1;
-					ladderAL.get(x + 1)[y] = -1;
+		System.out.println("선택한 위치에 bar를 삽입합니다.");
+		System.out.println("지정한 칼럼과 그 다음 칼럼의 사이에 삽입됩니다. 맨 마지막 칼럼은 선택할 수 없습니다.");
+		boolean insertingBar = true;
+		while (insertingBar) {
+
+			int targetColumn = 0;
+			int targetIndex1 = 0;
+			boolean selectingLeftPoint = true;
+			while (selectingLeftPoint) {
+
+				System.out.println("삽입할 bar의 좌측 점의 x좌표를 입력하세요.");
+				targetColumn = ReadStdinInt.getInt(columns - 1);
+
+				System.out.println("삽입할 bar의 좌측 점의 y좌표를 입력하세요.");
+				targetIndex1 = ReadStdinInt.getInt(columnLength);
+
+				if (ladderAL.get(targetColumn - 1)[targetIndex1 - 1] != 0) {
+					System.out.println("선택한 좌표에는 이미 값이 입력돼 있습니다. 다른 좌표를 선택해 주세요.");
+				} else {
+					selectingLeftPoint = false;
 				}
+			}
+
+			int targetIndex2 = 0;
+			boolean selectingRightPoint = true;
+			while (selectingRightPoint) {
+				System.out.println("삽입할 bar의 우측 점의 y좌표를 입력하세요.");
+				targetIndex2 = ReadStdinInt.getInt(columnLength);
+
+				if (ladderAL.get(targetColumn - 1 + 1)[targetIndex2 - 1] != 0) {
+					System.out.println("선택한 좌표에는 이미 값이 입력돼 있습니다. 다른 좌표를 선택해 주세요.");
+				} else {
+					selectingRightPoint = false;
+				}
+			}
+
+			ladderAL.get(targetColumn - 1)[targetIndex1 - 1] = targetIndex2;
+			ladderAL.get(targetColumn - 1 + 1)[targetIndex2 - 1] = -targetIndex1;
+			System.out.println("다음과 같은 위치에 bar를 입력했습니다.");
+			displayCurrentBars();
+
+			System.out.println("bar를 더 입력하시겠습니까? (1: 계속 입력, 2: 중단)");
+			if (ReadStdinInt.getInt() != 1) {
+				break;
 			}
 		}
 	}
+
+	void displayCurrentBars() {
+		for (int y = 0; y < columnLength; y++) {
+			for (int x = 0; x < columns; x++) {
+				System.out.print(ladderAL.get(x)[y]);
+				System.out.print("\t");
+			}
+			System.out.println();
+		}
+		System.out.println("======================================================");
+	}
+
 }
