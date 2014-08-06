@@ -1,5 +1,9 @@
 package ladder4;
 
+/**
+ * 현재 이 클래스는 사용하지 않고 있다.
+ * 사용하지 않는 코드는 삭제하는 것이 좋은 습관이다. from javajigi
+ */
 public class CurrentPoint {
 	private int pointX;
 	private int pointY;

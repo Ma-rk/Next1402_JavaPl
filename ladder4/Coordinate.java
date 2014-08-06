@@ -32,4 +32,8 @@ public class Coordinate {
 	public void setPointY(int pointY) {
 		this.y = pointY;
 	}
+	
+/**
+ * 한번 초기화한 객체 데이터를 set method를 통해 변경하지 않도록 하는 습관을 들인다. from javajigi
+ */
 }

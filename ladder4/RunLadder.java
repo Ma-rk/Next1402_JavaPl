@@ -46,6 +46,10 @@ public class RunLadder {
 
 			displayCurrentPoint(cp);// 루프 돌 때마다 현재 상태를 화면에 출력
 
+			/**
+			 * if 내의 로직을 Coordinate 객체 내부로 이동해 본다.
+			 * 지금과 이 때의 차이점을 인식해 본다. from javajigi
+			 */
 			if (cp.getPointY() > columnLength - 1) {// 사다리의 맨 밑을 벗어나면 중단
 				break;
 			} else if (ladderAL.get(cp.getPointX())[cp.getPointY()] == 0 || lastMovedDirection == Direction.HOIZENTAL) {
@@ -62,11 +66,25 @@ public class RunLadder {
 				}
 				lastMovedDirection = Direction.HOIZENTAL;
 			}
+			/**
+			 * 위 로직의 복잡도가 너무 높다.
+			 * 복잡도를 낮출 수 방법이 없을까?
+			 * ladderAL을 가지는 별도의 객체를 이 객체에서 위 로직을 수행하도록 할 수 없을까? 
+			 * 4단계 동영상 한번 보면 좋겠다. from javajigi
+			 */
 		}
 		System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
 	}
 
 	void displayCurrentPoint(Coordinate cp) {
+		/**
+		 * http://youtu.be/jTD8gjuKJG4 : 디버그 로그 메시지 구현
+		 * http://youtu.be/T6-LOoGKgDE : 리팩토링, enum을 활용한 다형성
+		 * http://youtu.be/0hn71C22UBI : 리팩토링을 통해 Position 객체 도출
+		 * 
+		 * 이 동영상을 보고 좀 더 간소화할 수 있는 방법 찾아본다.
+		 * 이와 같은 방식으로 앞의 runLadder() 메소드를 리팩토링해 본다. from javajigi
+		 */
 		for (int y = 0; y < columnLength; y++) {
 			for (int x = 0; x < columns; x++) {
 				if (cp.getPointX() == x && cp.getPointY() == y) {

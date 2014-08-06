@@ -11,6 +11,11 @@ import java.util.Random;
  * @history :
  * @desc :
  */
+
+/**
+ * 사용자의 값을 입력받는 부분과 사다리타기를 생성하는 부분을 분리해본다.
+ * 현재는 이 클래스가 2개 이상의 역할을 하고 있다. from javajigi
+ */
 class GenerateLadder {
 	ArrayList<int[]> ladderAL;
 	int columns;
