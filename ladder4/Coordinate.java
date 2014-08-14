@@ -1,13 +1,5 @@
 package ladder4;
 
-/**
- * @FileName: Coordinate.java
- * @Project : ladder4
- * @Date : 2014. 7. 30.
- * @author : markk
- * @history :
- * @desc : stores coordinate value
- */
 public class Coordinate {
 	private int x;
 	private int y;
@@ -17,19 +9,25 @@ public class Coordinate {
 		this.y = pointY;
 	}
 
-	public int getPointX() {
+	public int getX() {
 		return x;
 	}
 
-	public void setPointX(int pointX) {
-		this.x = pointX;
-	}
-
-	public int getPointY() {
+	public int getY() {
 		return y;
 	}
 
-	public void setPointY(int pointY) {
-		this.y = pointY;
+	public void left() {
+		y = -Ladder4.ladderAL.get(x)[y] - 1;
+		x--;
+	}
+
+	public void right() {
+		y = Ladder4.ladderAL.get(x)[y] - 1;
+		x++;
+	}
+
+	public void down() {
+		y++;
 	}
 }

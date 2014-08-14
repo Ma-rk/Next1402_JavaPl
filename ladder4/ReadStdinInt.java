@@ -2,19 +2,9 @@ package ladder4;
 
 import java.io.*;
 
-/**
- * @FileName: ReadStdinInt.java
- * @Project : ladder4
- * @Date : 2014. 7. 30.
- * @author : markk
- * @history :
- * @desc :
- */
 public class ReadStdinInt {
 
-	/*
-	 * get int for num of column, num of bar ( num > 0 )
-	 */
+
 	static int getInt() {
 		String line = null;
 		int val = 0;
@@ -35,9 +25,7 @@ public class ReadStdinInt {
 		return val;
 	}
 
-	/*
-	 * get int for current player ( num of column >= num > 0 )
-	 */
+
 	static int getInt(int maxNum) {
 		String line = null;
 		int val = 0;
@@ -57,5 +45,42 @@ public class ReadStdinInt {
 			System.err.println("Unexpected IO ERROR: " + e);
 		}
 		return val;
+	}
+	
+	static Coordinate pickLeftPoint(int columns, int columnLength) {
+
+		Coordinate barLeftPoint = null;
+		int barLeftX = 0;
+		int barLeftY = 0;
+
+		System.out.println("삽입할 bar의 좌측 점의 x좌표를 입력하세요.");
+		barLeftX = ReadStdinInt.getInt(columns - 1);
+
+		System.out.println("삽입할 bar의 좌측 점의 y좌표를 입력하세요.");
+		barLeftY = ReadStdinInt.getInt(columnLength);
+
+		if (Ladder4.ladderAL.get(barLeftX - 1)[barLeftY - 1] != 0) {
+			System.out.println("선택한 좌표에는 이미 값이 입력돼 있습니다. 다른 좌표를 선택해 주세요.");
+		} else {
+			barLeftPoint = new Coordinate(barLeftX, barLeftY);
+		}
+		return barLeftPoint;
+	}
+
+	static Coordinate pichRightPoint(int columns, int columnLength, int barLeftX) {
+
+		Coordinate barRightPoint = null;
+		int barRightX = barLeftX + 1;
+		int barRightY = 0;
+
+		System.out.println("삽입할 bar의 우측 점의 y좌표를 입력하세요.");
+		barRightY = ReadStdinInt.getInt(columnLength);
+
+		if (Ladder4.ladderAL.get(barRightX - 1)[barRightY - 1] != 0) {
+			System.out.println("선택한 좌표에는 이미 값이 입력돼 있습니다. 다른 좌표를 선택해 주세요.");
+		} else {
+			barRightPoint = new Coordinate(barRightX, barRightY);
+		}
+		return barRightPoint;
 	}
 }
